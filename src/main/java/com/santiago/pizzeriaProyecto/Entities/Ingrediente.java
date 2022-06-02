@@ -14,6 +14,8 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.validation.constraints.NotEmpty;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -42,6 +44,7 @@ public class Ingrediente implements Serializable{
                 joinColumns = @JoinColumn(name="ingredientes_id"),
                 inverseJoinColumns = @JoinColumn(name="pizzas_id")
     )
+    @JsonIgnore
     private List<Pizza> pizzas;
     
 }
