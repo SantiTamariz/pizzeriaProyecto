@@ -17,6 +17,8 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import org.hibernate.annotations.ManyToAny;
 
 import lombok.AllArgsConstructor;
@@ -48,6 +50,7 @@ public class Pizza implements Serializable{
     
     @NotEmpty(message = "La lista de ingredientes no puede estar vacia")
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.MERGE, mappedBy = "pizzas")
+    @JsonIgnore
     private List<Ingrediente> ingredientes;
 
     //No requerido
