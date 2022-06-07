@@ -25,9 +25,14 @@ public class IngredienteServiceImpl implements IngredienteService{
     }
 
     @Override
-    public void guardarIngrediente(Ingrediente ingrediente) {
-        ingredienteDao.save(ingrediente);
+    public Ingrediente guardarIngrediente(Ingrediente ingrediente) {
+        return ingredienteDao.save(ingrediente);
         
+    }
+
+    @Override
+    public void deleteIngrediente(Long id) {
+        ingredienteDao.deleteById(id);
     }
     
 }

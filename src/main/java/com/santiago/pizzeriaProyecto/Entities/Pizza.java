@@ -9,17 +9,11 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import org.hibernate.annotations.ManyToAny;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -40,16 +34,17 @@ public class Pizza implements Serializable{
     @NotEmpty(message = "El nombre no puede estar vacio")
     private String nombre;
 
-    @NotNull(message = "La foto no puede ser nula")
     private String foto;
 
-    @NotNull(message = "El precio no puede ser nulo")
-    @Min(value = 0, message = "el precio no puede ser negativo")
-    @Max(value = 50, message = "el precio no puede ser mayor que 50€")
     private double precio;
     
     @NotEmpty(message = "La lista de ingredientes no puede estar vacia")
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.MERGE, mappedBy = "pizzas")
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+                name = "ingredientes_pizza",
+                joinColumns = @JoinColumn(name="pizzas_id"),
+                inverseJoinColumns = @JoinColumn(name="ingredientes_id")
+    )
     private List<Ingrediente> ingredientes;
 
     //No requerido

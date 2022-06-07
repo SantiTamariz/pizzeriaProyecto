@@ -23,31 +23,31 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.santiago.pizzeriaProyecto.Entities.Pizza;
-import com.santiago.pizzeriaProyecto.Services.PizzaService;
+import com.santiago.pizzeriaProyecto.Entities.Ingrediente;
+import com.santiago.pizzeriaProyecto.Services.IngredienteService;
 
 @RestController
-@RequestMapping("/pizzas")
-public class PizzaController {
-
-    @Autowired
-    private PizzaService pizzaService;
+@RequestMapping("/ingredientes")
+public class IngredienteController {
     
+    @Autowired
+    private IngredienteService ingredienteService;
+
     @GetMapping
-    private ResponseEntity<List<Pizza>> listarPizzas(Model model){
+    private ResponseEntity<List<Ingrediente>> listarIngredientes(Model model){
 
-        ResponseEntity<List<Pizza>> responseEntity = null;
+        ResponseEntity<List<Ingrediente>> responseEntity = null;
 
-        List<Pizza> pizzas = null;
+        List<Ingrediente> pizzas = null;
 
-        pizzas = pizzaService.findAll();
+        pizzas = ingredienteService.findAll();
 
         if (pizzas.size() > 0) {
             // si devuelve la lista == status OK
-            responseEntity = new ResponseEntity<List<Pizza>>(pizzas, HttpStatus.OK);
+            responseEntity = new ResponseEntity<List<Ingrediente>>(pizzas, HttpStatus.OK);
         } else {
             // si el listado esta vacio == otro status
-            responseEntity = new ResponseEntity<List<Pizza>>(HttpStatus.NO_CONTENT); //204
+            responseEntity = new ResponseEntity<List<Ingrediente>>(HttpStatus.NO_CONTENT); //204
         }
 
         return responseEntity;
@@ -55,14 +55,14 @@ public class PizzaController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Pizza> findById(@PathVariable(name = "id") Long id){
+    public ResponseEntity<Ingrediente> findById(@PathVariable(name = "id") Long id){
 
-        ResponseEntity<Pizza> responseEntity = null;
+        ResponseEntity<Ingrediente> responseEntity = null;
 
-        Pizza pizza = pizzaService.findById(id);
+        Ingrediente ingrediente = ingredienteService.findById(id);
 
-        if(pizza != null){
-            responseEntity = new ResponseEntity<Pizza>(pizza, HttpStatus.OK);
+        if(ingrediente != null){
+            responseEntity = new ResponseEntity<Ingrediente>(ingrediente, HttpStatus.OK);
         }
         else {
             responseEntity = new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -77,7 +77,7 @@ public class PizzaController {
     //@Valid para poder validar el JSON con las @annotaciones del Producto
     //BindingResult como objeto para validar el JSON
     @PostMapping()
-    public ResponseEntity<Map<String, Object>> save(@Valid @RequestBody Pizza pizza, BindingResult result){
+    public ResponseEntity<Map<String, Object>> save(@Valid @RequestBody Ingrediente ingrediente, BindingResult result){
 
         //Para la respuesta del objeto persistido
         ResponseEntity<Map<String, Object>> responseEntity = null;
@@ -108,23 +108,23 @@ public class PizzaController {
 
         try {
 
-            Pizza pizzaDB = pizzaService.guardarPizza(pizza);
+            Ingrediente ingredienteDB = ingredienteService.guardarIngrediente(ingrediente);
 
-            if(pizza!=null){
-                responseAsMap.put("mensaje", "La pizza con id " + pizzaDB.getId() 
-                + "y con ingredientes" + pizzaDB.getIngredientes() + "se ha creado exitosamente");
-                responseAsMap.put("pizza", pizzaDB);
+            if(ingrediente!=null){
+                responseAsMap.put("mensaje", "El ingrediente con id " + ingredienteDB.getId() 
+                + " se ha creado exitosamente");
+                responseAsMap.put("ingrediente", ingredienteDB);
                 responseEntity = new ResponseEntity<>(responseAsMap, HttpStatus.CREATED);
             }
             else{
-                responseAsMap.put("mensaje", "Error creando la pizza");
+                responseAsMap.put("mensaje", "Error creando el ingrediente");
                 responseEntity = new ResponseEntity<>(responseAsMap, HttpStatus.BAD_GATEWAY);
             }
 
         
         } catch (DataAccessException e) {
             //Excepcion de los datos
-            responseAsMap.put("mensaje", "No se ha podido crear la pizza" + e.getMostSpecificCause());
+            responseAsMap.put("mensaje", "No se ha podido crear el ingrediente" + e.getMostSpecificCause());
             responseEntity = new ResponseEntity<>(responseAsMap, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
@@ -135,7 +135,7 @@ public class PizzaController {
 
     //Modificar un producto es practicamente similar al anterior
     @PutMapping("/{id}")
-    public ResponseEntity<Map<String, Object>> modificar(@Valid @RequestBody Pizza pizza, BindingResult result, @PathVariable(name="id") Long id){
+    public ResponseEntity<Map<String, Object>> modificar(@Valid @RequestBody Ingrediente ingrediente, BindingResult result, @PathVariable(name="id") Long id){
 
         //Para la respuesta del objeto persistido
         ResponseEntity<Map<String, Object>> responseEntity = null;
@@ -166,24 +166,24 @@ public class PizzaController {
 
         try {
 
-            pizza.setId(id);
+            ingrediente.setId(id);
 
-            Pizza pizzaDB = pizzaService.guardarPizza(pizza);
+            Ingrediente ingredienteDB = ingredienteService.guardarIngrediente(ingrediente);
 
-            if(pizzaDB!=null){
-                responseAsMap.put("mensaje", "La pizza con id " + pizzaDB.getId() + " se ha modificado exitosamente");
-                responseAsMap.put("pizza", pizzaDB);
+            if(ingredienteDB!=null){
+                responseAsMap.put("mensaje", "El ingrediente con id " + ingredienteDB.getId() + " se ha modificado exitosamente");
+                responseAsMap.put("ingrediente", ingredienteDB);
                 responseEntity = new ResponseEntity<>(responseAsMap, HttpStatus.CREATED);
             }
             else {
-                responseAsMap.put("mensaje", "Error actualizando la pizza");
+                responseAsMap.put("mensaje", "Error actualizando el ingrediente");
                 responseEntity = new ResponseEntity<>(responseAsMap, HttpStatus.BAD_GATEWAY);
             }
 
         
         } catch (DataAccessException e) {
             //Excepcion de los datos
-            responseAsMap.put("mensaje", "No se ha podido actualizar la pizza" + e.getMostSpecificCause());
+            responseAsMap.put("mensaje", "No se ha podido actualizar el ingrediente" + e.getMostSpecificCause());
             responseEntity = new ResponseEntity<>(responseAsMap, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
@@ -197,14 +197,14 @@ public class PizzaController {
 
         ResponseEntity<String> responseEntity = null;
 
-        pizzaService.deletePizza(id);
+        ingredienteService.deleteIngrediente(id);
 
         //Comprobar si se ha borrado
-        Pizza pizzaDB = pizzaService.findById(id);
+        Ingrediente ingredienteDB = ingredienteService.findById(id);
 
-        if(pizzaDB==null){
+        if(ingredienteDB==null){
             //Se ha borrado correctamente
-            responseEntity = new ResponseEntity<>("La pizza se ha borrado correctamente", HttpStatus.OK);
+            responseEntity = new ResponseEntity<>("El ingrediente se ha borrado correctamente", HttpStatus.OK);
             
         }
         else responseEntity = new ResponseEntity<>("No se ha podido eliminar", HttpStatus.BAD_REQUEST);
@@ -213,4 +213,5 @@ public class PizzaController {
         return responseEntity;
 
     }
+
 }
