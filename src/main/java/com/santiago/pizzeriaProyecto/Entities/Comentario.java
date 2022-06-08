@@ -48,5 +48,7 @@ public class Comentario implements Serializable{
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JsonIgnore
     private Pizza pizza;
+
+    //Hola prueba
     
 }
