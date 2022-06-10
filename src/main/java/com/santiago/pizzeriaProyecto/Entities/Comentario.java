@@ -37,7 +37,7 @@ public class Comentario implements Serializable{
     private String texto;
 
     @NotNull(message = "La puntuacion no puede ser nula")
-    private int puntuación;
+    private int puntuacion;
 
     @NotNull(message = "La fecha no puede ser nula")
     private LocalDate fecha;

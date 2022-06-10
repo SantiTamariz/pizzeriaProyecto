@@ -38,7 +38,7 @@ public class PizzaServiceImpl implements PizzaService{
         for (Ingrediente ing : pizza.getIngredientes()){
             long id = ing.getId();
             if(ingredienteDao.findById(id)!=null){
-                precio =+ ing.getPrecio();
+                precio = precio + ing.getPrecio();
                 ingredientes.add(ing);
             }
 
